@@ -134,6 +134,12 @@ describe Hash do
         }
       })
     end
+
+    it "should merge normal values" do
+      expect({ 1 => 2 }.deep_merge(1 => 3)).to eq({
+        1 => 3
+      })
+    end
   end
 
   #

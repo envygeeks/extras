@@ -88,7 +88,7 @@ module Extras
           )
 
         else
-          return nv
+          nv
         end
       end
     end
