@@ -4,77 +4,80 @@
 
 module Extras
   module Hash
-    ALLOWED_OBJECTS = [NilClass, Hash, TrueClass, FalseClass,
-      Regexp, Array, Set, Fixnum, Bignum, Float].freeze
+    module ClassMethods
+      def allowed
+        @allowed ||= begin
+          {
+          :keys => [],
+          :vals => [NilClass, Hash, TrueClass, FalseClass, \
+            Regexp, Array, Set, Fixnum, Bignum, Float]
+          }
+        end
+      end
+    end
 
-    # allowed - a list of classes to allow.
-    # Symbolize keys and values of the current hash, skipping objects that are
-    # allowed to be skipped (leaving them as is, untouched.)
-    def symbolize(allowed: ALLOWED_OBJECTS)
-      allowed ||= []; each_with_object({}) do |(k, v), h|
-        k = k.to_sym unless !k.respond_to?(:to_sym) || allowed.include?(k.class)
-        v = v.to_sym unless !v.respond_to?(:to_sym) || allowed.include?(v.class)
+    # allowed_keys - a list of allowed keys that should not be converted.
+    # allowed_vals - a list of allowed vals that should not be converted.
+    # Symbolize keys and values of the current hash, skipping allowed objects.
+    def symbolize(allowed_keys: self.class.allowed[:keys], \
+          allowed_vals: self.class.allowed[:vals])
+
+      allowed_keys ||= []
+      allowed_vals ||= []
+
+      each_with_object({}) do |(k, v), h|
+        k = k.to_sym unless !k.respond_to?(:to_sym) || allowed_keys.include?(k.class)
+        v = v.to_sym unless !v.respond_to?(:to_sym) || allowed_vals.include?(v.class)
+
         h[k] = !v.respond_to?(:symbolize) ? v : v.symbolize({
-          :allowed => allowed
+          :allowed_keys => allowed_keys,
+          :allowed_vals => allowed_vals
         })
       end
     end
 
-    # allowed - a list of the classes to allow.
-    # Stringify keys and values of the current hash, skipping objects that are
-    # allowed to be skipped (leaving them as is, untouched.)
-    def stringify(allowed: ALLOWED_OBJECTS)
-      allowed ||= []; each_with_object({}) do |(k, v), h|
-        v = v.to_s if !v.respond_to?(:stringify) && !allowed.include?(v.class)
-        k = k.to_s unless allowed.include?(k.class)
+    # allowed_keys - a list of allowed keys that should not be converted.
+    # allowed_vals - a list of allowed vals that should not be converted.
+    # Stringify keys and values of the current hash, skipping objects
+    # that are allowed to be skipped (leaving them as is, untouched.)
+    def stringify(allowed_keys: self.class.allowed[:keys], \
+          allowed_vals: self.class.allowed[:vals])
+
+      allowed_keys ||= []
+      allowed_vals ||= []
+
+      each_with_object({}) do |(k, v), h|
+        v = v.to_s if !v.respond_to?(:stringify) && !allowed_vals.include?(v.class)
+        k = k.to_s unless allowed_keys.include?(k.class)
 
         h[k] = !v.respond_to?(:stringify) ? v : v.stringify({
+          :allowed_keys => allowed_keys,
+          :allowed_vals => allowed_vals
+        })
+      end
+    end
+
+    # Stringify the keys of the current hash, skipping allowed objects.
+    def stringify_keys(allowed: self.class.allowed[:keys])
+      allowed ||= []
+
+      each_with_object({}) do |(k, v), h|
+        k = k.to_s unless allowed.include?(k.class)
+        h[k] = !v.respond_to?(:stringify_keys) ? v : v.stringify({
           :allowed => allowed
         })
       end
     end
 
-    # allowed - a list of classes to allow.
-    # Stringify the keys of the current hash, skipping objects that are
-    # allowed to be skipped (leaving them as is, untouched.)
-    def stringify_keys(allowed: ALLOWED_OBJECTS)
-      allowed = [] if allowed.nil?
+    # Symbolize the keys of the current hash, skipping allowed objects.
+    def symbolize_keys(allowed: self.class.allowed[:keys])
+      allowed ||= []
 
       each_with_object({}) do |(k, v), h|
-        unless allowed.include?(k.class)
-          k = k.to_s
-        end
-
-        h[k] = \
-        if !v.respond_to?(:stringify_keys)
-          then v
-        else
-          v.stringify_keys({
-            :allowed => allowed
-          })
-        end
-      end
-    end
-
-    # allowed - a list of classes to allow.
-    # Symbolize the keys of the current hash, skipping objects that are
-    # allowed to be skipped (leaving them as is, untouched.)
-    def symbolize_keys(allowed: ALLOWED_OBJECTS)
-      allowed = [] if allowed.nil?
-      each_with_object({}) do |(k, v), h|
-        if k.respond_to?(:to_sym) && !allowed.include?(k.class)
-          k = k.to_sym
-        end
-
-        h[k] = \
-        if !v.respond_to?(:symbolize_keys)
-          then v
-
-        else
-          v.symbolize_keys({
-            :allowed => allowed
-          })
-        end
+        k = k.to_sym if k.respond_to?(:to_sym) && !allowed.include?(k.class)
+        h[k] = !v.respond_to?(:symbolize_keys) ? v : v.symbolize_keys({
+          :allowed => allowed
+        })
       end
     end
 
@@ -105,4 +108,7 @@ end
 
 class Hash
   prepend Extras::Hash
+  class << self
+    prepend Extras::Hash::ClassMethods
+  end
 end

@@ -13,19 +13,39 @@ describe Hash do
 
     #
 
-    context "allowed: [Class]" do
+    context "allowed_keys: [Class]" do
       it "should skip the values of that type" do
-        expect({ "hello" => "world" }.symbolize(:allowed => [String])).to eq({
-          "hello" => "world"
+        expect({ "hello" => "world" }.symbolize(:allowed_keys => [String])).to eq({
+          "hello" => :world
         })
       end
     end
 
     #
 
-    context "allowed: nil" do
+    context "allowed_vals: [Class]" do
+      it "should skip the values of that type" do
+        expect({ "hello" => "world" }.symbolize(:allowed_vals => [String])).to eq({
+          :hello => "world"
+        })
+      end
+    end
+
+    #
+
+    context "allowed_keys: nil" do
       it "should not throw and should continue" do
-        expect({ "hello" => "world" }.symbolize(:allowed => nil)).to eq({
+        expect({ "hello" => "world" }.symbolize(:allowed_keys => nil)).to eq({
+          :hello => :world
+        })
+      end
+    end
+
+    #
+
+    context "allowed_vals: nil" do
+      it "should not throw and should continue" do
+        expect({ "hello" => "world" }.symbolize(:allowed_vals => nil)).to eq({
           :hello => :world
         })
       end
@@ -43,19 +63,39 @@ describe Hash do
 
     #
 
-    context "allowed: [Class]" do
+    context "allowed_keys: [Class]" do
       it "should skip the values of that type" do
-        expect({ :hello => :world }.stringify(:allowed => [Symbol])).to eq({
-          :hello => :world
+        expect({ :hello => :world }.stringify(:allowed_keys => [Symbol])).to eq({
+          :hello => "world"
         })
       end
     end
 
     #
 
-    context "allowed: nil" do
+    context "allowed_vals: [Class]" do
+      it "should skip the values of that type" do
+        expect({ :hello => :world }.stringify(:allowed_vals => [Symbol])).to eq({
+          "hello" => :world
+        })
+      end
+    end
+
+    #
+
+    context "allowed_keys: nil" do
       it "should not throw and should continue" do
-        expect({ 1 => 2 }.stringify(:allowed => nil)).to eq({
+        expect({ 1 => 2 }.stringify(:allowed_keys => nil)).to eq({
+          "1" => 2
+        })
+      end
+    end
+
+    #
+
+    context "allowed_vals: nil" do
+      it "should not throw and should continue" do
+        expect( { 1 => 2 }.stringify(:allowed_vals => nil)).to eq({
           "1" => "2"
         })
       end
