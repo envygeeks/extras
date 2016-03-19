@@ -13,9 +13,9 @@ describe Array do
 
     #
 
-    context "allowed: [Class]" do
+    context "allowed_keys: [Class]" do
       it "should allow matching classes to pass" do
-        expect([:a].stringify(:allowed => [Symbol])).to eq [
+        expect([:a].stringify(:allowed_keys => [Symbol])).to eq [
           :a
         ]
       end
@@ -23,9 +23,9 @@ describe Array do
 
     #
 
-    context "allowed: nil" do
+    context "allowed_keys: nil" do
       it "should not throw and should continue" do
-        expect([1].stringify(:allowed => nil)).to eq %w(
+        expect([1].stringify(:allowed_keys => nil)).to eq %w(
           1
         )
       end
@@ -43,9 +43,9 @@ describe Array do
 
     #
 
-    context "allowed: [Class]" do
+    context "allowed_keys: [Class]" do
       it "should skip values that are that type" do
-        expect(["a"].symbolize(:allowed => [String])).to eq [
+        expect(["a"].symbolize(:allowed_keys => [String])).to eq [
           "a"
         ]
       end
@@ -55,7 +55,7 @@ describe Array do
 
     context "allowed: nil" do
       it "should not throw and should continue" do
-        expect(["a"].symbolize(:allowed => nil)).to eq [
+        expect(["a"].symbolize(:allowed_keys => nil)).to eq [
           :a
         ]
       end

@@ -4,41 +4,44 @@
 
 module Extras
   module Array
-    ALLOWED_OBJECTS = [NilClass, Hash, TrueClass, FalseClass,
-      Regexp, Array, Set, Fixnum, Bignum, Float].freeze
-
-    # Stringify an array's keys, skipping anything within the allowed list.
-    # Note: the allowed is an all or nothing style override, sorry for this...
-    # allowed - the objects you wish to allow to pass.
-    def stringify(allowed: ALLOWED_OBJECTS)
-      allowed = [] if allowed.nil?
-
-      map do |v|
-        allowed.include?(v.class) ? v : \
-        if !v.respond_to?(:stringify)
-          v.to_s
-
-        else
-          v.stringify({
-            :allowed => allowed
-          })
+    module ClassMethods
+      def allowed
+        @allowed ||= begin
+          out = {
+            :keys => [NilClass, Hash, TrueClass, FalseClass, \
+              Regexp, Array, Set, Fixnum, Bignum, Float]
+          }
         end
       end
     end
 
-    # Symbolize an array's keys, skpping anything within the allowed list.
-    # Note: the allowed is an all or nothing style override, sorry for this...
-    # allowed - the objects you wish to allow to pass.
-    def symbolize(allowed: ALLOWED_OBJECTS)
-      allowed = [] if allowed.nil?
+    # allowed_keys - a list of allowed keys that should not be converted.
+    # allowed_vals - a list of allowed vals that should not be converted.
+    # Stringify an array's keys, skipping anything within the allowed list.
+    def stringify(allowed_keys: self.class.allowed[:keys], allowed_vals: nil)
+      allowed_keys ||= []
 
       map do |v|
-        allowed.include?(v.class) ? v : \
-        if !v.respond_to?(:symbolize)
-          v.to_s.to_sym else v.symbolize({
-            :allowed => allowed
-          })
-        end
+        v = v.to_s unless allowed_keys.include?(v.class)
+        !v.respond_to?(:stringify) ? v : v.stringify({
+          :allowed_keys => allowed_keys,
+          :allowed_vals => allowed_vals
+        })
+      end
+    end
+
+    # allowed_keys - a list of allowed keys that should not be converted.
+    # allowed_vals - a list of allowed vals that should not be converted.
+    # Symbolize an array's keys, skpping anything within the allowed list.
+    def symbolize(allowed_keys: self.class.allowed[:keys], allowed_vals: nil)
+      allowed_keys ||= []
+
+      map do |v|
+        v = v.to_sym unless !v.respond_to?(:to_sym) || allowed_keys.include?(v.class)
+        !v.respond_to?(:symbolize) ? v : v.symbolize({
+          :allowed_keys => allowed_keys,
+          :allowed_vals => allowed_vals
+        })
       end
     end
   end
@@ -46,4 +49,7 @@ end
 
 class Array
   prepend Extras::Array
+  class << self
+    prepend Extras::Array::ClassMethods
+  end
 end
