@@ -58,7 +58,7 @@ module Extras
       allowed ||= self.class.allowed[:keys]
       each_with_object({}) do |(k, v), h|
         k = k.to_s unless allowed.include?(k.class)
-        h[k] = !v.respond_to?(:stringify_keys) ? v : v.stringify({
+        h[k] = !v.respond_to?(:stringify_keys) ? v : v.stringify_keys({
           :allowed => allowed
         })
       end
