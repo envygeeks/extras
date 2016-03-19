@@ -8,9 +8,9 @@ module Extras
       def allowed
         @allowed ||= begin
           {
-          :keys => [],
-          :vals => [NilClass, Hash, TrueClass, FalseClass, \
-            Regexp, Array, Set, Fixnum, Bignum, Float]
+            :keys => [],
+            :vals => [NilClass, Hash, TrueClass, FalseClass, \
+              Regexp, Array, Set, Fixnum, Bignum, Float]
           }
         end
       end
