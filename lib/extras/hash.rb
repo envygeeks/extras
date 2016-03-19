@@ -9,8 +9,9 @@ module Extras
         @allowed ||= begin
           {
             :keys => [],
-            :vals => [NilClass, Hash, TrueClass, FalseClass, \
-              Regexp, Array, Set, Fixnum, Bignum, Float]
+            :vals => [Object::NilClass, Object::Hash, Object::TrueClass, \
+              Object::FalseClass, Object::Regexp, Object::Array, Object::Set, \
+              Object::Fixnum, Object::Bignum, Object::Float]
           }
         end
       end
