@@ -18,8 +18,9 @@ module Extras
     # allowed_keys - a list of allowed keys that should not be converted.
     # allowed_vals - a list of allowed vals that should not be converted.
     # Stringify an array's keys, skipping anything within the allowed list.
-    def stringify(allowed_keys: self.class.allowed[:keys], allowed_vals: nil)
-      allowed_keys ||= []
+    def stringify(allowed_keys: nil, allowed_vals: nil)
+      allowed_keys ||= self.class.allowed[:keys]
+      allowed_keys ||= self.class.allowed[:vals]
 
       map do |v|
         v = v.to_s unless allowed_keys.include?(v.class)
@@ -33,8 +34,9 @@ module Extras
     # allowed_keys - a list of allowed keys that should not be converted.
     # allowed_vals - a list of allowed vals that should not be converted.
     # Symbolize an array's keys, skpping anything within the allowed list.
-    def symbolize(allowed_keys: self.class.allowed[:keys], allowed_vals: nil)
-      allowed_keys ||= []
+    def symbolize(allowed_keys: nil, allowed_vals: nil)
+      allowed_keys ||= self.class.allowed[:keys]
+      allowed_vals ||= self.class.allowed[:vals]
 
       map do |v|
         v = v.to_sym unless !v.respond_to?(:to_sym) || allowed_keys.include?(v.class)

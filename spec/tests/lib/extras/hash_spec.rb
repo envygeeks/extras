@@ -96,7 +96,7 @@ describe Hash do
     context "allowed_vals: nil" do
       it "should not throw and should continue" do
         expect( { 1 => 2 }.stringify(:allowed_vals => nil)).to eq({
-          "1" => "2"
+          "1" => 2
         })
       end
     end

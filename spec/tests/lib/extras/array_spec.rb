@@ -25,9 +25,9 @@ describe Array do
 
     context "allowed_keys: nil" do
       it "should not throw and should continue" do
-        expect([1].stringify(:allowed_keys => nil)).to eq %w(
+        expect([1].stringify(:allowed_keys => nil)).to eq [
           1
-        )
+        ]
       end
     end
   end
