@@ -1,17 +1,21 @@
+# ----------------------------------------------------------------------------
 # Frozen-string-literal: true
 # Copyright: 2015-2016 Jordon Bedwell - MIT License
 # Encoding: utf-8
+# ----------------------------------------------------------------------------
 
 require "shellwords"
 
 module Extras
   module Shell
 
-    # Note: This is taken from Ruby 2.3 StdLib.
+    # ------------------------------------------------------------------------
     # rubocop:disable Metrics/CyclomaticComplexity
     # Escapes a string double checking if it will double escape.
     # rubocop:disable Metrics/PerceivedComplexity
-    # str - the string that should be escaped.
+    # Note: This is taken from Ruby 2.3 StdLib.
+    # ------------------------------------------------------------------------
+
     def escape(str, original: false)
       if original
         return super(
@@ -45,6 +49,8 @@ module Extras
     alias shellescape escape
   end
 end
+
+#
 
 module Shellwords
   class << self

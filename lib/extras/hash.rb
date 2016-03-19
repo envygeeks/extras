@@ -1,6 +1,8 @@
+# ----------------------------------------------------------------------------
 # Frozen-string-literal: true
 # Copyright: 2015-2016 Jordon Bedwell - MIT License
 # Encoding: utf-8
+# ----------------------------------------------------------------------------
 
 module Extras
   module Hash
@@ -17,9 +19,10 @@ module Extras
       end
     end
 
-    # allowed_keys - a list of allowed keys that should not be converted.
-    # allowed_vals - a list of allowed vals that should not be converted.
+    # ------------------------------------------------------------------------
     # Symbolize keys and values of the current hash, skipping allowed objects.
+    # ------------------------------------------------------------------------
+
     def symbolize(allowed_keys: nil, allowed_vals: nil)
       keys = allowed_keys || self.class.allowed[:keys]
       vals = allowed_vals || self.class.allowed[:vals]
@@ -35,10 +38,11 @@ module Extras
       end
     end
 
-    # allowed_keys - a list of allowed keys that should not be converted.
-    # allowed_vals - a list of allowed vals that should not be converted.
+    # ------------------------------------------------------------------------
     # Stringify keys and values of the current hash, skipping objects
     # that are allowed to be skipped (leaving them as is, untouched.)
+    # ------------------------------------------------------------------------
+
     def stringify(allowed_keys: nil, allowed_vals: nil)
       keys = allowed_keys || self.class.allowed[:keys]
       vals = allowed_vals || self.class.allowed[:vals]
@@ -54,7 +58,10 @@ module Extras
       end
     end
 
+    # ------------------------------------------------------------------------
     # Stringify the keys of the current hash, skipping allowed objects.
+    # ------------------------------------------------------------------------
+
     def stringify_keys(allowed: nil)
       allowed ||= self.class.allowed[:keys]
       each_with_object({}) do |(k, v), h|
@@ -65,7 +72,10 @@ module Extras
       end
     end
 
+    # ------------------------------------------------------------------------
     # Symbolize the keys of the current hash, skipping allowed objects.
+    # ------------------------------------------------------------------------
+
     def symbolize_keys(allowed: nil)
       allowed ||= self.class.allowed[:keys]
       each_with_object({}) do |(k, v), h|
@@ -76,8 +86,10 @@ module Extras
       end
     end
 
+    # ------------------------------------------------------------------------
     # Merge hash into hash into hash into hash.
-    # new_h - the hash you wish to merge in.
+    # ------------------------------------------------------------------------
+
     def deep_merge(new_h)
       merge(new_h) do |_, ov, nv|
         if ov.respond_to?(:deep_merge) && nv.respond_to?(:deep_merge)
@@ -91,8 +103,10 @@ module Extras
       end
     end
 
-    # keys - the keys you wish to determine exist or not.
+    # ------------------------------------------------------------------------
     # Check to see if any of the given keys exist.
+    # ------------------------------------------------------------------------
+
     def any_key?(*keys)
       keys.any? do |k|
         key?(k)
@@ -100,6 +114,8 @@ module Extras
     end
   end
 end
+
+#
 
 class Hash
   prepend Extras::Hash
