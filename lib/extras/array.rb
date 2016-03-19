@@ -8,9 +8,9 @@ module Extras
       def allowed
         @allowed ||= begin
           out = {
-            :keys => [Object::NilClass, Object::Hash, Object::TrueClass, \
-              Object::FalseClass, Object::Regexp, Object::Array, Object::Set, \
-              Object::Fixnum, Object::Bignum, Object::Float]
+            :keys => [::NilClass, ::Hash, ::TrueClass, \
+              ::FalseClass, ::Regexp, ::Array, ::Set, ::Fixnum,
+              ::Bignum, ::Float]
           }
         end
       end
