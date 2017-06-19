@@ -22,7 +22,7 @@ module Extras
     # Split a string into an array.
     # ------------------------------------------------------------------------
 
-    def to_a(char: "\s", strip: true)
+    def char_to_a(char: "\s", strip: true)
       escaped = char.regexp_escape
       split(/(?<!\\)#{escaped}/).map do |v|
         strip ? v.gsub(/\\#{escaped}/, char) : v

@@ -14,9 +14,9 @@ describe String do
 
   #
 
-  describe "#to_a" do
+  describe "#char_to_a" do
     it "should accept the standard escape char" do
-      expect("hello\\ world hi!".to_a).to eq [
+      expect("hello\\ world hi!".char_to_a).to eq [
         "hello world", "hi!"
       ]
     end
@@ -33,7 +33,7 @@ describe String do
 
     context "char: val" do
       it "should split by that char" do
-        expect("hello:world".to_a(char: ":")).to eq [
+        expect("hello:world".char_to_a(char: ":")).to eq [
           "hello", "world"
         ]
       end

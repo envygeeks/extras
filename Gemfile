@@ -1,8 +1,6 @@
-# ----------------------------------------------------------------------------
 # Frozen-string-literal: true
 # Copyright: 2015-2016 Jordon Bedwell - MIT License
 # Encoding: utf-8
-# ----------------------------------------------------------------------------
 
 source "https://rubygems.org"
 gem "rake", :require => false
@@ -18,7 +16,7 @@ group :test do
 end
 
 group :development do
+  gem "rubocop", :require => false
   gem "luna-rubocop-formatters", :require => false
-  gem "rubocop", :github => "bbatsov/rubocop", :require => false
   gem "pry", :require => false
 end
