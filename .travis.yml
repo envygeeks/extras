@@ -2,22 +2,20 @@
 cache: bundler
 os: linux
 rvm:
-  - &ruby1 2.1.8
-  - &ruby2 2.2.4
-  - &ruby3 2.3.0
+  - &ruby1 2.1
+  - &ruby2 2.2
+  - &ruby3 2.3
+  - &ruby4 2.4
   - &jruby jruby-9.0.4.0
 matrix:
   allow_failures:
     - rvm: *jruby
-
 notifications:
   email:
     - jordon@envygeeks.io
-
 branches:
   only:
     - master
-
 addons:
     code_climate:
         repo_token:

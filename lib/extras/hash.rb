@@ -8,13 +8,24 @@ module Extras
   module Hash
     module ClassMethods
       def allowed
-        @allowed ||= begin
-          {
-            :keys => [],
-            :vals => [::NilClass, ::Hash, ::TrueClass, \
-              ::FalseClass, ::Regexp, ::Array, ::Set, ::Fixnum,
-              ::Bignum, ::Float]
-          }
+        if RUBY_VERSION < "2.4"
+          @allowed ||= begin
+            {
+              :keys => [],
+              :vals => [::NilClass, ::Hash, ::TrueClass, \
+                ::FalseClass, ::Regexp, ::Array, ::Set, ::Fixnum,
+                ::Bignum, ::Float]
+            }
+          end
+        else
+          @allowed ||= begin
+            {
+              :keys => [],
+              :vals => [::NilClass, ::Hash, ::TrueClass, \
+                ::FalseClass, ::Regexp,  ::Array, ::Set, ::Integer,
+                ::Float]
+            }
+          end
         end
       end
     end
