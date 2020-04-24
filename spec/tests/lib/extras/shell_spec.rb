@@ -58,5 +58,14 @@ describe Shellwords do
         described_class.escape("&")
       )
     end
+
+    #
+
+    it "should escape pathnames" do
+      expect(described_class.escape(described_class.escape(Pathname.new("")))).to eq(
+        described_class.escape("''")
+      )
+    end
+
   end
 end

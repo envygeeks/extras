@@ -39,6 +39,7 @@ module Extras
         end
 
       else
+        str = str.to_s
         regexp = /((?:\\)?[^A-Za-z0-9_\-.,:\/@\n])/
         str = str.gsub(regexp) { $1.start_with?("\\") ? $1 : "\\#{$1}" }
         str = str.gsub(/\n/, "'\n'")
